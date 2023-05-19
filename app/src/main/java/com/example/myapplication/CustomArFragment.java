@@ -38,10 +38,9 @@ public class CustomArFragment extends ArFragment {
 
         AugmentedImageDatabase aid = new AugmentedImageDatabase(session);
 
-        AsyncGettingBitmapFromUrl asyncGettingBitmapFromUrl = new AsyncGettingBitmapFromUrl();
-//        asyncGettingBitmapFromUrl.execute();
+//        new AsyncGettingBitmapFromUrl().execute();
 //        for (int i = 0; i < images.size(); i++) aid.addImage(names.get(i), images.get(i));
-        
+
         Bitmap image = BitmapFactory.decodeResource(getResources(), R.drawable.image);
         aid.addImage("image", image);
 
@@ -63,25 +62,21 @@ public class CustomArFragment extends ArFragment {
         return frameLayout;
     }
 
-    @Nullable
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            return BitmapFactory.decodeStream(input);
-        } catch (IOException e) {
-            // Log exception
-            return null;
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
     private class AsyncGettingBitmapFromUrl extends AsyncTask<String, Void, Bitmap> {
         final String TAG = "Read Data Activity";
-
+        protected Bitmap getBitmapFromURL(String src) {
+            try {
+                URL url = new URL(src);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                return BitmapFactory.decodeStream(input);
+            } catch (IOException e) {
+                // Log exception
+                return null;
+            }
+        }
         @Override
         protected Bitmap doInBackground(String... params) {
             FirebaseFirestore db;
